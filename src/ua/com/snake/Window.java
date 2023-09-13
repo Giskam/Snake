@@ -14,6 +14,9 @@ public class Window extends JFrame implements Runnable{
 	
 	public static int currentState;
 	public static Scene currentScene;
+	
+	public static KL  keyListener = new KL();
+	
 	public Window (int width, int height, String title) {
 		setSize(width, height);
 		setTitle(title);
@@ -23,6 +26,7 @@ public class Window extends JFrame implements Runnable{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		isRunning = true;
 		Window.changeState(0);
+		addKeyListener(Window.keyListener);
 	}
 	
 	public static void changeState (int newState) {
@@ -31,7 +35,7 @@ public class Window extends JFrame implements Runnable{
 		switch(Window.currentState) {
 		
 		case 0:
-			Window.currentScene = new MenuScene();
+			Window.currentScene = new MenuScene(Window.keyListener);
 			break;
 		case 1:
 			Window.currentScene = new GameScene();

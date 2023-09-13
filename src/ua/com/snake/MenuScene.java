@@ -2,18 +2,22 @@ package ua.com.snake;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 
 public class MenuScene extends Scene {
 
-	int i = 0;
+	public KL keyListener;
+	
+	public MenuScene (KL keyListener) {
+		this.keyListener = keyListener;
+	}
 	
 	@Override
 	public void update(double dt) {
 		// TODO Auto-generated method stub
-		if(i==1000) {
-			Window.changeState(1);
+		if(keyListener.isKeyPressed(KeyEvent.VK_UP)) {
+			System.out.println("Up arrow is pressed");
 		}
-		i++;
 	}
 
 	@Override
