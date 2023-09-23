@@ -16,7 +16,7 @@ public class Window extends JFrame implements Runnable{
 	public static Scene currentScene;
 	
 	public static KL  keyListener = new KL();
-	
+	public static ML mouseListener = new ML();
 	public Window (int width, int height, String title) {
 		setSize(width, height);
 		setTitle(title);
@@ -27,6 +27,8 @@ public class Window extends JFrame implements Runnable{
 		isRunning = true;
 		Window.changeState(0);
 		addKeyListener(Window.keyListener);
+		addMouseListener(mouseListener);
+		addMouseMotionListener(mouseListener);
 	}
 	
 	public static void changeState (int newState) {
@@ -35,7 +37,7 @@ public class Window extends JFrame implements Runnable{
 		switch(Window.currentState) {
 		
 		case 0:
-			Window.currentScene = new MenuScene(Window.keyListener);
+			Window.currentScene = new MenuScene(Window.keyListener, Window.mouseListener);
 			break;
 		case 1:
 			Window.currentScene = new GameScene();
@@ -47,6 +49,9 @@ public class Window extends JFrame implements Runnable{
 		}
 	}
 	
+	public static void close() {
+		
+	}
 	public void update(double dt) {
 		Image dbImage = createImage(getWidth(), getHeight());//off screen
 		Graphics dbg = dbImage.getGraphics(); // graphics context
