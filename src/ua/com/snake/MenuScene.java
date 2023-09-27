@@ -32,8 +32,8 @@ public class MenuScene extends Scene {
 			e.printStackTrace();
 		}
 		titleRect = new Rect(150, 40, 300, 100);
-		playRect = new Rect(310, 210, 600, 70);
-		exitRect = new Rect(410, 270, 600, 70);
+		playRect = new Rect(180, 210, 230, 70);
+		exitRect = new Rect(200, 270, 600, 70);
 		
 		playCurrentImage = play;
 		exitCurrentImage = exit;
@@ -45,7 +45,7 @@ public class MenuScene extends Scene {
 		if (mouseListener.getX()>=playRect.x && mouseListener.getX()<=playRect.x + playRect.width && mouseListener.getY() >= playRect.y && mouseListener.getY()<= playRect.y + playRect.height) {
 			playCurrentImage = playPressed;
 			if(mouseListener.isPressed) {
-				Window.changeState(1);
+				Window.getWindow().changeState(1);
 			}
 		}else {
 			playCurrentImage = play;
@@ -54,7 +54,7 @@ public class MenuScene extends Scene {
 				&& mouseListener.getY() >= exitRect.y && mouseListener.getY() <= exitRect.y + exitRect.height) {
 			exitCurrentImage = exitPressed;
 			if(mouseListener.isPressed) {
-			
+				Window.getWindow().close();
 			}
 		}else {
 			exitCurrentImage = exit;

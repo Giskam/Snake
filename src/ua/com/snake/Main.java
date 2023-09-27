@@ -3,7 +3,7 @@ package ua.com.snake;
 public class Main {
 
 	public static void main(String[] args) {
-		Window window = new Window(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Constants.TITLE);
+		Window window = Window.getWindow();
 		
 		Thread thread = new Thread(window);
 		thread.start();

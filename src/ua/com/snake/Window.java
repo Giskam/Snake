@@ -8,16 +8,18 @@ import java.awt.image.ImageObserver;
 
 import javax.swing.JFrame;
 
-public class Window extends JFrame implements Runnable{
+public class Window extends JFrame implements Runnable {
 
+
+	public static Window window = null;
 	public boolean isRunning;
-	
-	public static int currentState;
-	public static Scene currentScene;
-	
-	public static KL  keyListener = new KL();
-	public static ML mouseListener = new ML();
-	public Window (int width, int height, String title) {
+	public int currentState;
+	public Scene currentScene;
+
+	public KL keyListener = new KL();
+	public ML mouseListener = new ML();
+
+	public Window(int width, int height, String title) {
 		setSize(width, height);
 		setTitle(title);
 		setResizable(false);
@@ -25,61 +27,70 @@ public class Window extends JFrame implements Runnable{
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		isRunning = true;
-		Window.changeState(0);
-		addKeyListener(Window.keyListener);
+		changeState(0);
+		addKeyListener(keyListener);
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
 	}
-	
-	public static void changeState (int newState) {
-		Window.currentState = newState;
-		
-		switch(Window.currentState) {
-		
+
+	public void changeState(int newState) {
+		currentState = newState;
+
+		switch (currentState) {
+
 		case 0:
-			Window.currentScene = new MenuScene(Window.keyListener, Window.mouseListener);
+			currentScene = new MenuScene(keyListener, mouseListener);
 			break;
 		case 1:
-			Window.currentScene = new GameScene();
+			currentScene = new GameScene(keyListener);
 			break;
-	    default:
+		default:
 			System.out.println("Unknown scene");
-			Window.currentScene = null; 
+			currentScene = null;
 			break;
 		}
 	}
-	
-	public static void close() {
-		
+
+	public static Window getWindow() {
+		if (Window.window == null) {
+			Window.window = new Window(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Constants.TITLE);
+		}
+		return Window.window;
 	}
+ 
+	public void close() {
+		isRunning = false;
+	}
+
 	public void update(double dt) {
-		Image dbImage = createImage(getWidth(), getHeight());//off screen
+		Image dbImage = createImage(getWidth(), getHeight());// off screen
 		Graphics dbg = dbImage.getGraphics(); // graphics context
-		this.draw(dbg); // draw onto graphics(downCust to 2d) pane   
-		getGraphics().drawImage(dbImage, 0, 0, this);//get context; draw privios off screen on new off screen
-		
+		this.draw(dbg); // draw onto graphics(downCust to 2d) pane
+		getGraphics().drawImage(dbImage, 0, 0, this);// get context; draw privios off screen on new off screen
+
 		currentScene.update(dt);
 	}
-	
+
 	public void draw(Graphics g) {
-		Graphics2D g2 = (Graphics2D)g;
+		Graphics2D g2 = (Graphics2D) g;
 		currentScene.draw(g);
 	}
-	
+
 	@Override
 	public void run() {
 		double lastFrameTime = 0.0;
 		try {
-			while(isRunning) {
+			while (isRunning) {
 				double time = Time.getTime();
-				double deltaTime = time - lastFrameTime; 
+				double deltaTime = time - lastFrameTime;
 				lastFrameTime = time;
 
 				update(deltaTime);
 			}
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		this.dispose();
 	}
 }
